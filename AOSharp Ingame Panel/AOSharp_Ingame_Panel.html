@@ -1,31 +1,42 @@
-0) I'm going to assume you know how to create new files or to remove extensions from files. Just right-click into the folder and select New - Text Document. Rename whatever text document by removing the .txt-extension from it later. https://www.wikihow.com/Change-a-File-Extension this wikihow, section 2, describes it in detail.
+0) --- Create necessary files ---
+I'm going to assume you know how to create new files or to remove extensions from files. 
+Just right-click into the folder and select New - Text Document. Rename whatever text document by removing the .txt-extension from it later. 
+https://www.wikihow.com/Change-a-File-Extension this wikihow, section 2, describes it in detail.
+
+
+1) --- Locate necessary folders ---
+ Locate your AO folder under "%localappdata%\Funcom\Anarchy Online" (e.g: C:\Users\xx\AppData\Local\Funcom\Anarchy Online).
+There should be a unique foldername with letters and/or numbers "a1b2c3ff" or something similar. 
+Open this folder and the subfolder "Anarchy Online".
+
+
+2) --- Create necessary folders ---
+If not already present, create a subfolder called "scripts" and open this folder. 
+You should now be in the folder "C:\Users\xxxxxxxxx\AppData\Local\Funcom\Anarchy Online\xxxxxxxxxx\Anarchy Online\scripts\"
+
+
+3) --- Create the file you call ingame with /command ---
+Create a new file, right-click and choose "New Text Document". Whatever name you give this file will be the /command ingame.
+I've called mine "aosharpsettings" so ingame i type /aosharpsettings (or just /ao + tab to autocomplete). Paste the following:
+
+showfile aosharpsettings
 
 
 
-
-1) Locate your AO folder under "%localappdata%\Funcom\Anarchy Online" (e.g: C:\Users\xx\AppData\Local\Funcom\Anarchy Online). There should be a unique foldername with letters and/or numbers "a1b2c3ff" or something similar. Open this folder and the subfolder "Anarchy Online".
-
-2) If not already present, create a subfolder called "scripts" and open this folder. You should now be in the folder "C:\Users\xxxxxxxxx\AppData\Local\Funcom\Anarchy Online\xxxxxxxxxx\Anarchy Online\scripts\"
-
-3) Create a new file, right-click and choose "New Text Document". Whatever name you give this file will be the /command ingame. I've called mine "aosharpsettings" so ingame i type /aosharpsettings (or just /ao + tab to autocomplete). Paste the following:
-
-
-################## Copy from here
-/showfile aosharpsettings
-
-
-
-4) After you have created your text file, create a new subfolder called "text". Open this folder. You should now be in the folder: 
+4) --- Locate (or create) next subfolder ---
+After you have created your text file, create a new subfolder called "text". Open this folder. You should now be in the folder: 
 "C:\Users\xxxxxxxxx\AppData\Local\Funcom\Anarchy Online\xxxxxxxxxx\Anarchy Online\scripts\text"
 
 
-5) Create a new file and call it "aosharpsettings". 
-Paste the following code to create the actual panel you can use/access ingame. The file contains ascii code for empty spaces, if you need to adjust width of spacings, copy the spacing from the code underneath instead of just inserting blank spaces with spacebar. 
-(ascii code is ALT+255)
+5) --- Create the file containing the script itself ---
+Create a new file and call it "aosharpsettings". 
+Paste the following code to create the actual panel you can use/access ingame. The file contains ascii code for empty spaces, 
+if you need to adjust width of spacings, copy the spacing from the code underneath instead of just inserting blank spaces with spacebar. 
+(ascii code for a blank space is ALT+255)
 
 
 
-################## Copy from here
+################## Copy from here --- This goes in to the file created in part 5. ("aosharpsettings" if you've followed along so far.)
 
 
 <center><img src=tdb://id:GFX_GUI_TOOLBAR_BUTTON_RIGHT_HILITE>  <font color="#FFBC47">AO Sharp Panel</font>  <img src=tdb://id:GFX_GUI_TOOLBAR_BUTTON_LEFT_HILITE><br><br>
