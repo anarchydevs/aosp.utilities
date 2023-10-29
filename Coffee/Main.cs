@@ -1,54 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AOSharp.Core;
 using AOSharp.Core.UI;
 using AOSharp.Core.Inventory;
-using AOSharp.Core.Movement;
 using AOSharp.Common.GameData;
-using AOSharp.Common.GameData.UI;
-using AOSharp.Core.GameData;
-using AOSharp.Core.UI.Options;
-using AOSharp.Core.IPC;
-using AOSharp.Common.Unmanaged.Imports;
 using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-using System.Threading;
-using AOSharp.Common.Unmanaged.DataTypes;
-using Zoltu.IO;
-using SmokeLounge.AOtomation.Messaging.Messages;
-using SmokeLounge.AOtomation.Messaging.Messages.ChatMessages;
-using System.Runtime.InteropServices;
-using System.Drawing;
-using AOSharp.Common.SharedEventArgs;
 using SmokeLounge.AOtomation.Messaging.GameData;
 
 namespace Coffee
 {
     public class Main : AOPluginEntry
     {
-        public static bool CoffeeBot = false;
+        public static bool Toggle = false;
 
-        public static double _coffee = 0f;
+        public static double _timer = 0f;
 
         public override void Run(string pluginDir)
         {
             try
             {
-                Chat.WriteLine("Coffee plugin loaded");
-
-                Chat.WriteLine("Type /coffee to toggle on and off.");
+                Chat.WriteLine("Coffee loaded!");
+                Chat.WriteLine("/coffee for toggle.");
 
                 Game.OnUpdate += OnUpdate;
 
-                Chat.RegisterCommand("coffee", (string command, string[] param, ChatWindow chatWindow) =>
+                Chat.RegisterCommand("Coffee", (string command, string[] param, ChatWindow chatWindow) =>
                 {
-                    CoffeeBot = !CoffeeBot;
-                    Chat.WriteLine($"Coffee Toggled - {CoffeeBot}.");
+                    Toggle = !Toggle;
+                    Chat.WriteLine($"Coffee : {Toggle}");
                 });
-
             }
             catch (Exception e)
             {
@@ -58,7 +39,7 @@ namespace Coffee
 
         private void OnUpdate(object s, float deltaTime)
         {
-            if (CoffeeBot)
+            if (Toggle)
             {
                 Item coffee = Inventory.Items.Where(c => c.Name == "Miyashiro Superior Enhanced Coffee Machine").FirstOrDefault();
 
@@ -77,12 +58,12 @@ namespace Coffee
                 }
                 else
                 {
-                    if (Time.NormalTime > _coffee + 2.0 && !DynelManager.LocalPlayer.Cooldowns.ContainsKey(Stat.ElectricalEngineering))
+                    if (Time.NormalTime > _timer + 2.0 && !DynelManager.LocalPlayer.Cooldowns.ContainsKey(Stat.ElectricalEngineering))
                     {
                         if (coffee != null)
                         {
                             coffee.Use(null, false);
-                            _coffee = Time.NormalTime;
+                            _timer = Time.NormalTime;
                         }
                     }
                 }
