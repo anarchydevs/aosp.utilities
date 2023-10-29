@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plasma", "Plasma\Plasma.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleAutoSeller", "SimpleAutoSeller\SimpleAutoSeller.csproj", "{3209BB0C-C11F-4D34-A72F-2B7D31A888D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoItemLevel", "AutoItemLevel\AutoItemLevel.csproj", "{2B66CE4A-03F2-40C3-9904-452EFC8F1FAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{3209BB0C-C11F-4D34-A72F-2B7D31A888D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3209BB0C-C11F-4D34-A72F-2B7D31A888D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3209BB0C-C11F-4D34-A72F-2B7D31A888D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B66CE4A-03F2-40C3-9904-452EFC8F1FAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B66CE4A-03F2-40C3-9904-452EFC8F1FAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B66CE4A-03F2-40C3-9904-452EFC8F1FAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B66CE4A-03F2-40C3-9904-452EFC8F1FAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
