@@ -64,13 +64,13 @@ namespace AutoItemLevel
                 {
                     try
                     {
-                        Config = Config.Load($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\AOSharp\\KnowsMods\\AutoItemLevel\\{DynelManager.LocalPlayer.Name}\\Config.json");
+                        Config = Config.Load($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\AOSharp\\AOSP\\AutoItemLevel\\{DynelManager.LocalPlayer.Name}\\Config.json");
 
-                        settingsWindow = Window.Create(new Rect(50, 50, 300, 300), "Info Helper", "Settings", WindowStyle.Default, WindowFlags.AutoScale);
+                        settingsWindow = Window.Create(new Rect(50, 50, 300, 300), "Auto Item", "Settings", WindowStyle.Default, WindowFlags.AutoScale);
 
                         if (settingsWindow != null && !settingsWindow.IsVisible)
                         {
-                            AppendSettingsTab("Info Helper", settingsWindow);
+                            AppendSettingsTab("Auto Item", settingsWindow);
 
                         }
                     }
