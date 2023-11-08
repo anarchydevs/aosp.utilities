@@ -41,7 +41,7 @@ namespace AutoItemLevel
 
         public override void Run(string pluginDir)
         {
-            Config = Config.Load($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\AOSharp\\KnowsMods\\AutoItemLevel\\{DynelManager.LocalPlayer.Name}\\Config.json");
+            Config = Config.Load($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\AOSharp\\AOSP\\AutoItemLevel\\{DynelManager.LocalPlayer.Name}\\Config.json");
 
             PluginDir = pluginDir;
 
@@ -53,6 +53,8 @@ namespace AutoItemLevel
 
             _settings.AddVariable("Enable", false);
             _settings["Enable"] = false;
+
+            _settings.AddVariable("Newcomer", false);
 
             Chat.WriteLine("AutoItemLevel Loaded!");
             Chat.WriteLine("/autoitem for settings.");
@@ -90,41 +92,43 @@ namespace AutoItemLevel
 
             if (Time.AONormalTime > Delay + 0.5)
             {
-
-                int playerLevel = DynelManager.LocalPlayer.Level;
-
-                foreach (Item item in Inventory.Items)
+                if (_settings["Newcomer"].AsBool())
                 {
-                    if (item.Name.Contains("Newcomer"))
+                    int playerLevel = DynelManager.LocalPlayer.Level;
+
+                    foreach (Item item in Inventory.Items)
                     {
-                        // Step 1: Move armor to inventory if its QualityLevel doesn't match the player's level
-                        if (item.QualityLevel != playerLevel && item.Slot.Type != IdentityType.Inventory)
+                        if (item.Name.Contains("Newcomer"))
                         {
-                            item.MoveToInventory();
-                        }
-
-                        // Step 2: Use item in inventory to level up
-                        if (item.Slot.Type == IdentityType.Inventory && item.QualityLevel != playerLevel)
-                        {
-                            item.Use(); // Level the armor
-                        }
-
-                        // Step 3: Equip item
-                        Identity leftArmIdentity = new Identity(IdentityType.ArmorPage, (int)EquipSlot.Cloth_LeftArm);
-                        List<EquipSlot> equipSlots = item.EquipSlots;
-
-                        // If left arm is empty and the item is a sleeve, equip it there first
-                        if (!Inventory.Find(leftArmIdentity, out _) && item.Name.Contains("Sleeve"))
-                        {
-                            item.Equip(EquipSlot.Cloth_LeftArm);
-                            
-                        }
-                        else
-                        {
-                            foreach (EquipSlot equipSlot in item.EquipSlots)
+                            // Step 1: Move armor to inventory if its QualityLevel doesn't match the player's level
+                            if (item.QualityLevel != playerLevel && item.Slot.Type != IdentityType.Inventory)
                             {
-                                item.Equip(equipSlot);
-                                break;  // Equip the item only once
+                                item.MoveToInventory();
+                            }
+
+                            // Step 2: Use item in inventory to level up
+                            if (item.Slot.Type == IdentityType.Inventory && item.QualityLevel != playerLevel)
+                            {
+                                item.Use(); // Level the armor
+                            }
+
+                            // Step 3: Equip item
+                            Identity leftArmIdentity = new Identity(IdentityType.ArmorPage, (int)EquipSlot.Cloth_LeftArm);
+                            List<EquipSlot> equipSlots = item.EquipSlots;
+
+                            // If left arm is empty and the item is a sleeve, equip it there first
+                            if (!Inventory.Find(leftArmIdentity, out _) && item.Name.Contains("Sleeve"))
+                            {
+                                item.Equip(EquipSlot.Cloth_LeftArm);
+
+                            }
+                            else
+                            {
+                                foreach (EquipSlot equipSlot in item.EquipSlots)
+                                {
+                                    item.Equip(equipSlot);
+                                    break;  // Equip the item only once
+                                }
                             }
                         }
                     }
@@ -134,8 +138,7 @@ namespace AutoItemLevel
 
                 if (SettingsController.settingsWindow != null && SettingsController.settingsWindow.IsValid)
                 {
-                    SettingsController.settingsWindow.FindView("ChannelBox", out TextInputView channelInput);
-                    SettingsController.settingsWindow.FindView("SitPercentageBox", out TextInputView sitPercentageInput);
+                   // SettingsController.settingsWindow.FindView("ChannelBox", out TextInputView channelInput);
 
                     if (SettingsController.settingsWindow.FindView("AutoItemLevelInfoView", out Button infoView))
                     {
@@ -189,17 +192,8 @@ namespace AutoItemLevel
 
         public void Save()
         {
-            if (!Directory.Exists($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\AOSharp"))
-                Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\AOSharp");
-
-            if (!Directory.Exists($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\AOSharp\\KnowsMods"))
-                Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\AOSharp\\KnowsMods");
-
-            if (!Directory.Exists($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\AOSharp\\KnowsMods\\AutoItemLevel"))
-                Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\AOSharp\\KnowsMods\\AutoItemLevel");
-
-            if (!Directory.Exists($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\AOSharp\\KnowsMods\\AutoItemLevel\\{DynelManager.LocalPlayer.Name}"))
-                Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\AOSharp\\KnowsMods\\AutoItemLevel\\{DynelManager.LocalPlayer.Name}");
+            if (!Directory.Exists($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\AOSharp\\AOSP\\AutoItemLevel\\{DynelManager.LocalPlayer.Name}"))
+                Directory.CreateDirectory($"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}\\AOSharp\\AOSP\\AutoItemLevel\\{DynelManager.LocalPlayer.Name}");
 
             File.WriteAllText(_path, JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented));
         }
