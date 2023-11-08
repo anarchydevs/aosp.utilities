@@ -67,7 +67,7 @@
     <Compile Include="SettingsController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="UI\AutoItemLevelnfoView.xml">
+    <Content Include="UI\AutoItemLevelInfoView.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="UI\AutoItemLevelSettingWindow.xml">
