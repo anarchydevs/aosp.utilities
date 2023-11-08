@@ -9,9 +9,6 @@ using AOSharp.Common.GameData.UI;
 using System.IO;
 using Newtonsoft.Json;
 using AOSharp.Core.Inventory;
-using SmokeLounge.AOtomation.Messaging.Messages.N3Messages;
-using SmokeLounge.AOtomation.Messaging.GameData;
-using System.Linq;
 
 namespace AutoItemLevel
 {
@@ -30,14 +27,9 @@ namespace AutoItemLevel
         public static Window _infoWindow;
         public static View _infoView;
 
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetForegroundWindow();
-
         protected Settings _settings;
 
         public static string PluginDir;
-
-        private bool IsActiveWindow => GetForegroundWindow() == Process.GetCurrentProcess().MainWindowHandle;
 
         public override void Run(string pluginDir)
         {
@@ -85,11 +77,6 @@ namespace AutoItemLevel
         private void OnUpdate(object s, float deltaTime)
         {
 
-            //if (!_settings["Enable"].AsBool())
-            //{
-            //    return;
-            //}
-
             if (Time.AONormalTime > Delay + 0.5)
             {
                 if (_settings["Newcomer"].AsBool())
@@ -100,36 +87,43 @@ namespace AutoItemLevel
                     {
                         if (item.Name.Contains("Newcomer"))
                         {
-                            // Step 1: Move armor to inventory if its QualityLevel doesn't match the player's level
-                            if (item.QualityLevel != playerLevel && item.Slot.Type != IdentityType.Inventory)
+                            // Step 1: if its QualityLevel doesn't match the player's level
+                            if (item.QualityLevel < playerLevel)
                             {
-                                item.MoveToInventory();
+                                // Move armor to inventory
+                                if (item.Slot.Type != IdentityType.Inventory)
+                                {
+                                    item.MoveToInventory();
+                                }
+
+                                // Step 2: Use item in inventory to level up
+                                if (item.Slot.Type == IdentityType.Inventory)
+                                {
+                                    item.Use(); // Level the armor
+                                }
                             }
 
-                            // Step 2: Use item in inventory to level up
-                            if (item.Slot.Type == IdentityType.Inventory && item.QualityLevel != playerLevel)
-                            {
-                                item.Use(); // Level the armor
-                            }
-
-                            // Step 3: Equip item
                             Identity leftArmIdentity = new Identity(IdentityType.ArmorPage, (int)EquipSlot.Cloth_LeftArm);
                             List<EquipSlot> equipSlots = item.EquipSlots;
 
-                            // If left arm is empty and the item is a sleeve, equip it there first
-                            if (!Inventory.Find(leftArmIdentity, out _) && item.Name.Contains("Sleeve"))
+                            // Step 3: Equip item
+                            if (item.QualityLevel == playerLevel && item.Slot.Type != IdentityType.ArmorPage)
                             {
-                                item.Equip(EquipSlot.Cloth_LeftArm);
-
-                            }
-                            else
-                            {
-                                foreach (EquipSlot equipSlot in item.EquipSlots)
+                                // If left arm is empty and the item is a sleeve, equip it there first
+                                if (!Inventory.Find(leftArmIdentity, out _) && item.Name.Contains("Sleeve"))
                                 {
-                                    item.Equip(equipSlot);
-                                    break;  // Equip the item only once
+                                    item.Equip(EquipSlot.Cloth_LeftArm);
+                                }
+                                else
+                                {
+                                    foreach (EquipSlot equipSlot in item.EquipSlots)
+                                    {
+                                        item.Equip(equipSlot);
+                                        break;  // Equip the item only once
+                                    }
                                 }
                             }
+
                         }
                     }
                 }
