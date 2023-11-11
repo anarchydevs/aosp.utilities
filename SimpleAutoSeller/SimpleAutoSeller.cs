@@ -22,6 +22,7 @@ namespace SAS
         protected double LastZonedTime = Time.NormalTime;
 
         private int _itemsToTrade = 0;
+        private int _itemsToSell = 0;
 
         public override void Run(string pluginDir)
         {
@@ -46,8 +47,6 @@ namespace SAS
             }
         }
 
-
-
         private void OnUpdate(object s, float deltaTime)
         {
             if (Toggle)
@@ -61,6 +60,7 @@ namespace SAS
                         bag.Use();
                         bag.Use();
                         SetBags = true;
+                        _itemsToSell += 1;
                     }
                 }
 
@@ -91,13 +91,20 @@ namespace SAS
                 foreach (Item SellItem in Inventory.Items.Where(c => c.Slot.Type == IdentityType.Inventory && c.UniqueIdentity.Type != IdentityType.MissionKey && c.UniqueIdentity.Type != IdentityType.Container))
                 {
                     if (SellItem.Name.Contains("Blood Plasma") || SellItem.Name.Contains("Pattern") || SellItem.Name.Contains("Perfectly Cut"))
+                    {
                         SpecCom.Use();
-                    Trade.AddItem(DynelManager.LocalPlayer.Identity, SellItem.Slot);
-                    Chat.WriteLine($"Selling QL {SellItem.QualityLevel} {SellItem.Name}, Qty: {SellItem.Charges}, CanFlags: {SellItem.CanFlags}");
+                    }    
+                    else 
+                    { 
+                        Trade.AddItem(DynelManager.LocalPlayer.Identity, SellItem.Slot);
+                        Chat.WriteLine($"Selling QL {SellItem.QualityLevel} {SellItem.Name}, Qty: {SellItem.Charges}, CanFlags: {SellItem.CanFlags}");
+                    }
                     _itemsToTrade += 1;
                 }
                 if (_itemsToTrade > 0)
                     Trade.Accept(Identity.None);
+                if (_itemsToSell == 0)
+                    Toggle = !Toggle;
             }
         }
         private void ProccessPearl()
