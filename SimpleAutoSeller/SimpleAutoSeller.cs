@@ -21,6 +21,8 @@ namespace SAS
         public static bool SetBags = false;
         protected double LastZonedTime = Time.NormalTime;
 
+        private int _itemsToTrade = 0;
+
         public override void Run(string pluginDir)
         {
             try
@@ -50,6 +52,7 @@ namespace SAS
         {
             if (Toggle)
             {
+                _itemsToTrade = 0;
                 if (!SetBags)
                 {
                     List<Item> bags = Inventory.Items.Where(c => c.UniqueIdentity.Type == IdentityType.Container).ToList();
@@ -59,7 +62,6 @@ namespace SAS
                         bag.Use();
                         SetBags = true;
                     }
-
                 }
 
                 if (!Inventory.Items.Any(c => c.Name.Contains("Pearl") || c.Name.Contains("Monster Parts")
@@ -69,8 +71,8 @@ namespace SAS
 
                     if (LootBag != null)
                         foreach (Item MoveItem in LootBag.Items.Take(Inventory.NumFreeSlots - 1))
-                            if (MoveItem.Name.Contains("Pearl") || MoveItem.Name.Contains("Pattern") 
-                                || MoveItem.Name.Contains("Monster Parts") || MoveItem.Name.Contains("Blood Plasma"))
+                            //if (MoveItem.Name.Contains("Pearl") || MoveItem.Name.Contains("Pattern")
+                            //    || MoveItem.Name.Contains("Monster Parts") || MoveItem.Name.Contains("Blood Plasma"))
                                 MoveItem.MoveToInventory();
                 }
 
@@ -86,13 +88,16 @@ namespace SAS
                     ProccessPearl();
                 }
 
-                foreach (Item SellItem in Inventory.Items.Where(c => c.Slot.Type == IdentityType.Inventory))
+                foreach (Item SellItem in Inventory.Items.Where(c => c.Slot.Type == IdentityType.Inventory && c.UniqueIdentity.Type != IdentityType.MissionKey && c.UniqueIdentity.Type != IdentityType.Container))
                 {
                     if (SellItem.Name.Contains("Blood Plasma") || SellItem.Name.Contains("Pattern") || SellItem.Name.Contains("Perfectly Cut"))
                         SpecCom.Use();
                     Trade.AddItem(DynelManager.LocalPlayer.Identity, SellItem.Slot);
-                    Trade.Accept(Identity.None);
+                    Chat.WriteLine($"Selling QL {SellItem.QualityLevel} {SellItem.Name}, Qty: {SellItem.Charges}, CanFlags: {SellItem.CanFlags}");
+                    _itemsToTrade += 1;
                 }
+                if (_itemsToTrade > 0)
+                    Trade.Accept(Identity.None);
             }
         }
         private void ProccessPearl()
