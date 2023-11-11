@@ -90,35 +90,40 @@ namespace AutoItemLevel
                             // Step 1: if its QualityLevel doesn't match the player's level
                             if (item.QualityLevel < playerLevel)
                             {
+                                Chat.WriteLine($"Checking QL : {item.QualityLevel} {item.Name}");
                                 // Move armor to inventory
                                 if (item.Slot.Type != IdentityType.Inventory)
                                 {
                                     item.MoveToInventory();
+                                    Chat.WriteLine($"Moving: QL {item.QualityLevel} {item.Name} to inventory");
                                 }
 
                                 // Step 2: Use item in inventory to level up
                                 if (item.Slot.Type == IdentityType.Inventory)
                                 {
                                     item.Use(); // Level the armor
-                                }
+                                    Chat.WriteLine($"Leveling: QL {item.QualityLevel} {item.Name}");
+                                } 
                             }
-
-                            Identity leftArmIdentity = new Identity(IdentityType.ArmorPage, (int)EquipSlot.Cloth_LeftArm);
-                            List<EquipSlot> equipSlots = item.EquipSlots;
 
                             // Step 3: Equip item
                             if (item.QualityLevel == playerLevel && item.Slot.Type != IdentityType.ArmorPage)
                             {
+                                Identity leftArmIdentity = new Identity(IdentityType.ArmorPage, (int)EquipSlot.Cloth_LeftArm);
+                                List<EquipSlot> equipSlots = item.EquipSlots;
+                                
                                 // If left arm is empty and the item is a sleeve, equip it there first
                                 if (!Inventory.Find(leftArmIdentity, out _) && item.Name.Contains("Sleeve"))
                                 {
                                     item.Equip(EquipSlot.Cloth_LeftArm);
+                                    Chat.WriteLine($"Equipping: QL {item.QualityLevel} {item.Name} in {EquipSlot.Cloth_LeftArm.ToString()} slot");
                                 }
                                 else
                                 {
                                     foreach (EquipSlot equipSlot in item.EquipSlots)
                                     {
                                         item.Equip(equipSlot);
+                                        Chat.WriteLine($"Equipping: QL {item.QualityLevel} {item.Name} in {equipSlot.ToString()} slot");
                                         break;  // Equip the item only once
                                     }
                                 }
